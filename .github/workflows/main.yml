@@ -1,0 +1,89 @@
+name: RDP
+
+des
+
+on:
+
+workflow_dispatch:
+
+jobs:
+
+secure-rdp:
+
+runs-on: windows-latest
+
+timeout-minutes: 3600
+
+steps:
+
+name: Configure Core RDP Settings run:
+
+#Enable Remote Desktop and disable Network Level Set-ItemProperty Path "
+
+HKLM: \System\CurrentContr -Name "fDenyTSConnections" -Va
+
+Set-ItemProperty Path "HKLM\System\CurrentContr
+
+-Name "UserAuthentication" -Va
+
+Set-ItemProperty Path 'HKLM: \System\CurrentContr
+
+-Name "SecurityLayer" -Value
+
+#Remove any existing rule with the same name to netsh advfirewall firewall delete rule name="RDP
+
+#For testing, allow any incoming connection on p netsh advfirewall firewall add rule name "RDP-Ta dir in action=allow protocol=TCP localport=3389
+
+#(Optional) Restart the Remote Desktop service Restart-Service -Name TeraService -Force
+
+name: Create RDP User with Secure Password
+
+run:
+
+Add-Type-AssemblyName System.Security
+
+$charSet@
+
+Upper [char[]] (65..90)
+
+#A-Z
+
+Lower [char[]] (97..122)
+
+#a-z
+
+Number
+
+[char[]] (48..57)
+
+#0-9 [char[]] (58..64
+
+Special ((char[]] (33..47)
+
+[char[]] (91..96) [char[]] (123..
+
+SrawPassword = @()
+
+SrawPassword SrawPassword ScharSet. Upper | Get-Random -Cour ScharSet.Lower Get-Random -Coun
+
+$rawPassword ScharSet.Number Get-Random Cou
+
+SrawPassword ScharSet. Special | Get-Random-Co
+
+$password-join (SrawPassword | Sort-Object (C
+
+$securePass ConvertTo-SecureString $password -
+
+New-Localuser Name "User" Password $securePass
+
+Add-LocalGroupttember -Group "Administrators -Mem
+
+Add-LocalGroupilember Group "Remote Desktop Users
+
+echo "RDP CREDS-User: User Password: $password
+
+if (not (Get-LocalUser Name "User")) { Write-Error "User creation failed"
+
+exit 1
+
+<
